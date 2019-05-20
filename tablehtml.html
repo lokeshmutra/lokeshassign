@@ -1,0 +1,170 @@
+<?php
+$servername = "localhost";
+$username = "admin";
+$password = "admin";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+echo "Connected successfully";
+
+// Create database
+
+$sql = "SELECT id, provider, rating FROM Myassign";
+$result = $conn->query($sql);
+
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "id: " . $row["id"]. " - Name: " . $row["provider"]. " " . $row["price"]. "<br>";
+    }
+} else {
+    echo "0 results";
+}
+$conn->close();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+        <link rel="stylesheet" 
+        href="tablehtml.html">
+        <link rel="stylesheet" href="csshome.css">
+        <link rel="stylesheet" href="cssitems.css">sssss
+        <link rel="stylesheet" href="tablecss.css">
+<title>home assignment</title>
+</head>
+<body>
+    
+    <div class="topnav">
+        <a class="active" href="#home">Home</a>
+        <div class="search-container">
+                <form class="example" action="/action_page.php">
+                    <input type="text" placeholder="Search.." name="search">
+                    <button class="dropbtn" type="submit"><i class="fa fa-search">SEARCH</i></button>
+                  </form>
+        </div>
+      </div>
+    </br>
+    <div class="dropdown">
+            <button class="dropbtn">SORT</button>
+            <div class="dropdown-content">
+                    <button class="dropbtn1" onclick="sortTable(0)">NAME</button>
+                    <button class="dropbtn1" onclick="sortTable(1)">COST</button>
+                    <button class="dropbtn1" onclick="sortTable(2)">RATING</button>
+                    <button class="dropbtn1" onclick="sortTable(3)">SPEED</button>
+            </div>
+          </div>
+    </br>
+<table id="myTable">
+  <tr>
+   <!--When a header is clicked, run the sortTable function, with a parameter, 0 for sorting by names, 1 for sorting by country:-->  
+    <th>NAME</th>
+    <th >COST</th>
+    <th >RATING</th>
+    <th >SPEED</th>
+  </tr>
+  <tr>
+    <td>BSNL</td>
+    <td>$100</td>
+    <td>#2</td>
+    <td>2 MBPS</td>
+  </tr>
+  <tr>
+    <td>AIRTEL</td>
+    <td>$200</td>
+    <td>#1</td>
+    <td>5 MBPS</td>
+  </tr>
+  <tr>
+    <td>IDEA</td>
+    <td>$200</td>
+    <td>#3</td>
+    <td>9 MBPS</td>
+  </tr>
+  <tr>
+    <td>VODAFONE</td>
+    <td>$900</td>
+    <td>#4</td>
+    <td>8 MBPS</td>
+  </tr>
+  <tr>
+    <td>JIO</td>
+    <td>$500</td>
+    <td>#5</td>
+    <td>5 MBPS</td>
+  </tr>
+  <tr>
+    <td>AIRCEL</td>
+    <td>$500</td>
+    <td>#1</td>
+    <td>4 MBPS</td>
+  </tr>
+  <tr>
+    <td>TATA</td>
+    <td>$700</td>
+    <td>#5</td>
+    <td>3 MBPS</td>
+  </tr>
+</table>
+<script>
+function sortTable(n) {
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  table = document.getElementById("myTable");
+  switching = true;
+  //Set the sorting direction to ascending:
+  dir = "asc"; 
+  /*Make a loop that will continue until no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.rows;
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[n];
+      y = rows[i + 1].getElementsByTagName("TD")[n];
+      /*check if the two rows should switch place,
+      based on the direction, asc or desc:*/
+      if (dir == "asc") {
+        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch= true;
+          break;
+        }
+      } else if (dir == "desc") {
+        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          //if so, mark as a switch and break the loop:
+          shouldSwitch = true;
+          break;
+        }
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+      //Each time a switch is done, increase this count by 1:
+      switchcount ++;      
+    } else {
+      /*If no switching has been done AND the direction is "asc",
+      set the direction to "desc" and run the while loop again.*/
+      if (switchcount == 0 && dir == "asc") {
+        dir = "desc";
+        switching = true;
+      }
+    }
+  }
+}
+</script>
+</body>
+</html>
